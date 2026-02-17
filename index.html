@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex Interativa - Pro</title>
+    <title>Pokédex Interativa - Dual Type</title>
     <style>
         :root {
             --pokedex-red: #dc0a2d;
-            --screen-blue: #97cbd5;
             /* Cores dos Tipos */
-            --color-planta: #78C850;
-            --color-fogo: #F08030;
-            --color-agua: #6890F0;
-            --color-vento: #A890F0;
-            --color-pedra: #B8A038;
+            --color-planta: #78C850; --color-fogo: #F08030; --color-agua: #6890F0;
+            --color-vento: #A890F0; --color-pedra: #B8A038; --color-veneno: #A040A0;
+            --color-eletrico: #F8D030; --color-terra: #E0C068; --color-psiquico: #F85888;
+            --color-inseto: #A8B820; --color-gelo: #98D8D8; --color-dragao: #7038F8;
+            --color-noturno: #705848; --color-fada: #EE99AC; --color-normal: #A8A878;
+            --color-lutador: #C03028; --color-metal: #B8B8D0; --color-fantasma: #705898;
             --color-default: #705848;
         }
 
@@ -40,13 +40,8 @@
             flex-wrap: wrap;
         }
 
-        .left-panel {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        /* Painel Esquerdo */
+        .left-panel { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 15px; }
 
         .main-screen {
             background-color: #dedede;
@@ -56,76 +51,48 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
-        #pokemon-img {
-            width: 70%;
-            height: auto;
-            image-rendering: pixelated;
-        }
+        #pokemon-img { width: 70%; image-rendering: pixelated; }
 
-        .right-panel {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        /* Painel Direito */
+        .right-panel { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 10px; }
 
         .info-screen {
             background-color: #51ae5f;
             padding: 15px;
             border-radius: 10px;
             border: 3px solid #222;
-            min-height: 160px;
+            min-height: 180px;
             color: #111;
         }
 
-        /* Estilo Dinâmico do Ícone de Tipo */
+        /* Estilo dos Ícones de Tipo */
+        .types-container { display: flex; gap: 5px; margin-bottom: 10px; }
+
         .type-icon {
-            display: inline-block;
-            padding: 5px 12px;
+            padding: 5px 10px;
             border-radius: 4px;
             color: white;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 12px;
-            border: 1px solid rgba(0,0,0,0.2);
-            margin-bottom: 10px;
-            background-color: var(--color-default);
+            font-size: 11px;
+            border: 1px solid rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
         }
 
-        /* Classes de Cores */
+        /* Classes de Cores Dinâmicas */
         .tipo-planta { background-color: var(--color-planta); }
         .tipo-fogo { background-color: var(--color-fogo); }
         .tipo-agua { background-color: var(--color-agua); }
-        .tipo-vento { background-color: var(--color-vento); }
-        .tipo-pedra { background-color: var(--color-pedra); }
+        .tipo-veneno { background-color: var(--color-veneno); }
+        .tipo-eletrico { background-color: var(--color-eletrico); }
+        .tipo-normal { background-color: var(--color-normal); }
+        .tipo-default { background-color: var(--color-default); }
 
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        input, select, button {
-            padding: 10px;
-            border-radius: 5px;
-            border: 2px solid black;
-            font-family: inherit;
-        }
-
-        .search-btn {
-            grid-column: span 2;
-            background: #222;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .search-btn:hover { background: #444; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input, select, button { padding: 10px; border: 2px solid black; font-family: inherit; border-radius: 5px; }
+        .search-btn { grid-column: span 2; background: #222; color: white; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -134,52 +101,42 @@
     <div class="left-panel">
         <div style="display: flex; gap: 10px;">
             <div style="width: 45px; height: 45px; background: #00f2ff; border: 4px solid white; border-radius: 50%; box-shadow: 0 0 10px #fff;"></div>
-            <div style="width: 12px; height: 12px; background: #ff0000; border-radius: 50%; border: 1px solid black;"></div>
-            <div style="width: 12px; height: 12px; background: #ffcc00; border-radius: 50%; border: 1px solid black;"></div>
-            <div style="width: 12px; height: 12px; background: #33cc33; border-radius: 50%; border: 1px solid black;"></div>
         </div>
-
         <div class="main-screen">
             <img id="pokemon-img" src="https://via.placeholder.com/200?text=..." alt="Pokemon">
         </div>
-
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
             <div style="font-size: 28px; font-weight: bold;" id="poke-number">#000</div>
-            <div style="width: 50px; height: 50px; background: #222; border-radius: 50%; position: relative;">
-                <div style="position: absolute; width: 100%; height: 4px; background: #444; top: 23px;"></div>
-                <div style="position: absolute; height: 100%; width: 4px; background: #444; left: 23px;"></div>
-            </div>
+            <div style="width: 50px; height: 50px; background: #222; border-radius: 50%;"></div>
         </div>
     </div>
 
     <div class="right-panel">
         <div class="info-screen">
-            <h2 id="poke-name" style="margin: 0 0 5px 0;">Aguardando...</h2>
-            <div id="poke-type" class="type-icon">TIPO</div>
-            <p id="poke-desc" style="font-size: 13px; line-height: 1.4;">Carregue os dados da planilha para começar a busca.</p>
+            <h2 id="poke-name" style="margin: 0 0 5px 0;">Nome</h2>
+            <div id="types-wrapper" class="types-container">
+                </div>
+            <p id="poke-desc" style="font-size: 13px; line-height: 1.4;">Carregue os dados da planilha.</p>
             <p style="font-size: 12px; margin: 0;"><strong>Geração:</strong> <span id="poke-gen">-</span></p>
         </div>
 
         <div class="controls">
-            <input type="text" id="search-name" list="poke-list" placeholder="Nome do Pokemon...">
+            <input type="text" id="search-name" list="poke-list" placeholder="Nome...">
             <datalist id="poke-list"></datalist>
-
-            <input type="text" id="search-num" placeholder="Ex: #001">
+            <input type="text" id="search-num" placeholder="#001">
             
             <select id="search-type">
                 <option value="">Todos os Tipos</option>
                 <option value="Planta">Planta</option>
+                <option value="Veneno">Veneno</option>
                 <option value="Fogo">Fogo</option>
                 <option value="Agua">Água</option>
-                <option value="Vento">Vento</option>
-                <option value="Pedra">Pedra</option>
             </select>
 
             <select id="search-gen">
                 <option value="">Geração</option>
                 <option value="1">1ª Gen</option>
                 <option value="2">2ª Gen</option>
-                <option value="3">3ª Gen</option>
             </select>
 
             <button class="search-btn" onclick="filtrar()">ANALISAR DADOS</button>
@@ -188,16 +145,13 @@
 </div>
 
 <script>
-    // Link do seu CSV publicado no Google Sheets
     const SHEETS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRT9ZO1G-zKKvplEN0ABPgZ8Ot9QSAdpKT8MaZGFdIdnZgBxn2AqW4cRynR2_3-Ylw-z_QGNpBCxySN/pub?output=csv';
-    
     let pokemonData = [];
 
     async function loadData() {
         try {
             const response = await fetch(SHEETS_URL);
             const data = await response.text();
-            
             const rows = data.split('\n').slice(1);
             const dataList = document.getElementById('poke-list');
             
@@ -206,21 +160,19 @@
                 const p = {
                     numero: cols[0]?.trim(),
                     nome: cols[1]?.trim(),
-                    tipo: cols[2]?.trim(),
+                    tipo: cols[2]?.trim(), // Espera "Planta / Veneno" ou apenas "Fogo"
                     geracao: cols[3]?.trim(),
                     descricao: cols[4]?.trim(),
                     foto: cols[5]?.trim()
                 };
-
-                // Adiciona na lista suspensa
                 if(p.nome) {
-                    let option = document.createElement('option');
-                    option.value = p.nome;
-                    dataList.appendChild(option);
+                    let opt = document.createElement('option');
+                    opt.value = p.nome;
+                    dataList.appendChild(opt);
                 }
                 return p;
             });
-        } catch (e) { console.error("Erro na conexão:", e); }
+        } catch (e) { console.error(e); }
     }
 
     function exibirPokemon(p) {
@@ -230,35 +182,49 @@
         document.getElementById('poke-gen').innerText = p.geracao;
         document.getElementById('pokemon-img').src = p.foto;
 
-        // Lógica de Cor do Ícone de Tipo
-        const typeEl = document.getElementById('poke-type');
-        typeEl.innerText = p.tipo;
+        // Lógica de Múltiplos Tipos
+        const wrapper = document.getElementById('types-wrapper');
+        wrapper.innerHTML = ''; // Limpa tipos anteriores
+
+        // Divide o texto por "/" ou "," e remove espaços
+        const tipos = p.tipo.split(/[/,]/); 
         
-        // Reseta classes e aplica a nova
-        typeEl.className = 'type-icon'; 
-        const tipoLimpo = p.tipo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove acentos
-        typeEl.classList.add('tipo-' + tipoLimpo);
+        tipos.forEach(t => {
+            const tipoLimpo = t.trim();
+            if (tipoLimpo) {
+                const span = document.createElement('span');
+                span.innerText = tipoLimpo;
+                span.className = 'type-icon';
+                
+                // Formata nome da classe (remove acentos e espaços)
+                const classeCor = 'tipo-' + tipoLimpo.toLowerCase()
+                                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                                    .replace(/\s+/g, '');
+                
+                span.classList.add(classeCor);
+                wrapper.appendChild(span);
+            }
+        });
     }
 
     function filtrar() {
-        const nameFilter = document.getElementById('search-name').value.toLowerCase();
-        const numFilter = document.getElementById('search-num').value;
-        const typeFilter = document.getElementById('search-type').value;
-        const genFilter = document.getElementById('search-gen').value;
+        const nameF = document.getElementById('search-name').value.toLowerCase();
+        const numF = document.getElementById('search-num').value;
+        const typeF = document.getElementById('search-type').value;
+        const genF = document.getElementById('search-gen').value;
 
         const res = pokemonData.find(p => {
-            return (nameFilter === "" || p.nome.toLowerCase() === nameFilter) &&
-                   (numFilter === "" || p.numero === numFilter) &&
-                   (typeFilter === "" || p.tipo === typeFilter) &&
-                   (genFilter === "" || p.geracao === genFilter);
+            return (nameF === "" || p.nome.toLowerCase() === nameF) &&
+                   (numF === "" || p.numero === numF) &&
+                   (typeF === "" || p.tipo.includes(typeF)) && // Busca parcial no tipo
+                   (genF === "" || p.geracao === genF);
         });
 
         if (res) exibirPokemon(res);
-        else alert("Dados não encontrados!");
+        else alert("Pokémon não encontrado!");
     }
 
     loadData();
 </script>
-
 </body>
 </html>
