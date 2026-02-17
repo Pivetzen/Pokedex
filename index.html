@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokédex Interativa</title>
+    <title>Pokédex Interativa - Pro</title>
     <style>
         :root {
             --pokedex-red: #dc0a2d;
-            --pokedex-dark-red: #8b0000;
             --screen-blue: #97cbd5;
+            /* Cores dos Tipos */
+            --color-planta: #78C850;
+            --color-fogo: #F08030;
+            --color-agua: #6890F0;
+            --color-vento: #A890F0;
+            --color-pedra: #B8A038;
+            --color-default: #705848;
         }
 
         body {
@@ -21,7 +27,6 @@
             margin: 0;
         }
 
-        /* Estrutura Principal Inspirada na Imagem */
         .pokedex {
             display: flex;
             background-color: var(--pokedex-red);
@@ -35,7 +40,6 @@
             flex-wrap: wrap;
         }
 
-        /* Lado Esquerdo */
         .left-panel {
             flex: 1;
             min-width: 300px;
@@ -49,7 +53,6 @@
             border: 15px solid #222;
             border-bottom-left-radius: 40px;
             height: 250px;
-            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,121 +60,135 @@
         }
 
         #pokemon-img {
-            width: 80%;
+            width: 70%;
             height: auto;
             image-rendering: pixelated;
         }
 
-        /* Lado Direito (Filtros e Info) */
         .right-panel {
             flex: 1;
             min-width: 300px;
-            background-color: var(--pokedex-red);
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
         .info-screen {
-            background-color: #51ae5f; /* Verde estilo GameBoy */
+            background-color: #51ae5f;
             padding: 15px;
             border-radius: 10px;
             border: 3px solid #222;
-            height: 150px;
-            font-size: 14px;
+            min-height: 160px;
             color: #111;
-            overflow-y: auto;
         }
 
-        /* Estilização dos Filtros */
+        /* Estilo Dinâmico do Ícone de Tipo */
+        .type-icon {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            border: 1px solid rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            background-color: var(--color-default);
+        }
+
+        /* Classes de Cores */
+        .tipo-planta { background-color: var(--color-planta); }
+        .tipo-fogo { background-color: var(--color-fogo); }
+        .tipo-agua { background-color: var(--color-agua); }
+        .tipo-vento { background-color: var(--color-vento); }
+        .tipo-pedra { background-color: var(--color-pedra); }
+
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
 
-        input, select {
-            padding: 8px;
+        input, select, button {
+            padding: 10px;
             border-radius: 5px;
             border: 2px solid black;
-            background: #fff;
+            font-family: inherit;
         }
 
         .search-btn {
             grid-column: span 2;
-            padding: 10px;
             background: #222;
             color: white;
             cursor: pointer;
-            text-transform: uppercase;
             font-weight: bold;
+            transition: 0.2s;
         }
 
-        .type-icon {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            margin-top: 5px;
-            background-color: #555;
-        }
+        .search-btn:hover { background: #444; }
     </style>
 </head>
 <body>
 
 <div class="pokedex">
     <div class="left-panel">
-        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <div style="width: 50px; height: 50px; background: cyan; border: 4px solid white; border-radius: 50%;"></div>
-            <div style="width: 15px; height: 15px; background: red; border-radius: 50%;"></div>
-            <div style="width: 15px; height: 15px; background: yellow; border-radius: 50%;"></div>
-            <div style="width: 15px; height: 15px; background: green; border-radius: 50%;"></div>
+        <div style="display: flex; gap: 10px;">
+            <div style="width: 45px; height: 45px; background: #00f2ff; border: 4px solid white; border-radius: 50%; box-shadow: 0 0 10px #fff;"></div>
+            <div style="width: 12px; height: 12px; background: #ff0000; border-radius: 50%; border: 1px solid black;"></div>
+            <div style="width: 12px; height: 12px; background: #ffcc00; border-radius: 50%; border: 1px solid black;"></div>
+            <div style="width: 12px; height: 12px; background: #33cc33; border-radius: 50%; border: 1px solid black;"></div>
         </div>
 
         <div class="main-screen">
-            <img id="pokemon-img" src="https://via.placeholder.com/200?text=Carregando..." alt="Pokemon">
+            <img id="pokemon-img" src="https://via.placeholder.com/200?text=..." alt="Pokemon">
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="width: 40px; height: 40px; background: #222; border-radius: 50%;"></div>
-            <div id="poke-number" style="font-size: 24px; font-weight: bold;">#000</div>
-            <div style="width: 60px; height: 10px; background: red; border-radius: 5px;"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
+            <div style="font-size: 28px; font-weight: bold;" id="poke-number">#000</div>
+            <div style="width: 50px; height: 50px; background: #222; border-radius: 50%; position: relative;">
+                <div style="position: absolute; width: 100%; height: 4px; background: #444; top: 23px;"></div>
+                <div style="position: absolute; height: 100%; width: 4px; background: #444; left: 23px;"></div>
+            </div>
         </div>
     </div>
 
     <div class="right-panel">
-        <div class="info-screen" id="info-screen">
-            <h2 id="poke-name" style="margin-top:0">Nome do Pokémon</h2>
-            <div id="poke-type" class="type-icon">Tipo</div>
-            <p id="poke-desc">Use os filtros abaixo para buscar um Pokémon na base de dados do Google Sheets.</p>
-            <p><strong>Geração:</strong> <span id="poke-gen">-</span></p>
+        <div class="info-screen">
+            <h2 id="poke-name" style="margin: 0 0 5px 0;">Aguardando...</h2>
+            <div id="poke-type" class="type-icon">TIPO</div>
+            <p id="poke-desc" style="font-size: 13px; line-height: 1.4;">Carregue os dados da planilha para começar a busca.</p>
+            <p style="font-size: 12px; margin: 0;"><strong>Geração:</strong> <span id="poke-gen">-</span></p>
         </div>
 
         <div class="controls">
-            <input type="text" id="search-name" placeholder="Nome...">
-            <input type="text" id="search-num" placeholder="Número (ex: #001)">
+            <input type="text" id="search-name" list="poke-list" placeholder="Nome do Pokemon...">
+            <datalist id="poke-list"></datalist>
+
+            <input type="text" id="search-num" placeholder="Ex: #001">
+            
             <select id="search-type">
                 <option value="">Todos os Tipos</option>
+                <option value="Planta">Planta</option>
                 <option value="Fogo">Fogo</option>
                 <option value="Agua">Água</option>
-                <option value="Planta">Planta</option>
                 <option value="Vento">Vento</option>
                 <option value="Pedra">Pedra</option>
             </select>
+
             <select id="search-gen">
-                <option value="">Todas Gerações</option>
-                <option value="1">1ª Geração</option>
-                <option value="2">2ª Geração</option>
-                <option value="3">3ª Geração</option>
+                <option value="">Geração</option>
+                <option value="1">1ª Gen</option>
+                <option value="2">2ª Gen</option>
+                <option value="3">3ª Gen</option>
             </select>
-            <button class="search-btn" onclick="filtrar()">Buscar na Database</button>
+
+            <button class="search-btn" onclick="filtrar()">ANALISAR DADOS</button>
         </div>
     </div>
 </div>
 
 <script>
-    // COLE O LINK DO SEU CSV DO GOOGLE SHEETS AQUI
+    // Link do seu CSV publicado no Google Sheets
     const SHEETS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRT9ZO1G-zKKvplEN0ABPgZ8Ot9QSAdpKT8MaZGFdIdnZgBxn2AqW4cRynR2_3-Ylw-z_QGNpBCxySN/pub?output=csv';
     
     let pokemonData = [];
@@ -181,11 +198,12 @@
             const response = await fetch(SHEETS_URL);
             const data = await response.text();
             
-            // Converte CSV para Objeto (Simples)
             const rows = data.split('\n').slice(1);
+            const dataList = document.getElementById('poke-list');
+            
             pokemonData = rows.map(row => {
                 const cols = row.split(',');
-                return {
+                const p = {
                     numero: cols[0]?.trim(),
                     nome: cols[1]?.trim(),
                     tipo: cols[2]?.trim(),
@@ -193,20 +211,33 @@
                     descricao: cols[4]?.trim(),
                     foto: cols[5]?.trim()
                 };
+
+                // Adiciona na lista suspensa
+                if(p.nome) {
+                    let option = document.createElement('option');
+                    option.value = p.nome;
+                    dataList.appendChild(option);
+                }
+                return p;
             });
-            console.log("Dados carregados com sucesso!");
-        } catch (error) {
-            console.error("Erro ao carregar dados:", error);
-        }
+        } catch (e) { console.error("Erro na conexão:", e); }
     }
 
     function exibirPokemon(p) {
         document.getElementById('poke-name').innerText = p.nome;
         document.getElementById('poke-number').innerText = p.numero;
-        document.getElementById('poke-type').innerText = p.tipo;
         document.getElementById('poke-desc').innerText = p.descricao;
         document.getElementById('poke-gen').innerText = p.geracao;
         document.getElementById('pokemon-img').src = p.foto;
+
+        // Lógica de Cor do Ícone de Tipo
+        const typeEl = document.getElementById('poke-type');
+        typeEl.innerText = p.tipo;
+        
+        // Reseta classes e aplica a nova
+        typeEl.className = 'type-icon'; 
+        const tipoLimpo = p.tipo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Remove acentos
+        typeEl.classList.add('tipo-' + tipoLimpo);
     }
 
     function filtrar() {
@@ -215,21 +246,17 @@
         const typeFilter = document.getElementById('search-type').value;
         const genFilter = document.getElementById('search-gen').value;
 
-        const resultado = pokemonData.find(p => {
-            return (nameFilter === "" || p.nome.toLowerCase().includes(nameFilter)) &&
+        const res = pokemonData.find(p => {
+            return (nameFilter === "" || p.nome.toLowerCase() === nameFilter) &&
                    (numFilter === "" || p.numero === numFilter) &&
                    (typeFilter === "" || p.tipo === typeFilter) &&
                    (genFilter === "" || p.geracao === genFilter);
         });
 
-        if (resultado) {
-            exibirPokemon(resultado);
-        } else {
-            alert("Pokémon não encontrado com esses filtros!");
-        }
+        if (res) exibirPokemon(res);
+        else alert("Dados não encontrados!");
     }
 
-    // Carregar ao iniciar
     loadData();
 </script>
 
